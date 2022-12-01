@@ -1,0 +1,65 @@
+
+#DONE Inserting
+class pickup(models.Model):
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    workerid = models.CharField(max_length=50)
+    pi_date = models.CharField(max_length=20)
+    pi_time = models.CharField(max_length=10)
+    lat = models.CharField(max_length=50)
+    lon = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.username
+#DONE Inserting
+class nearby_bins(models.Model):
+    sl = models.CharField(max_length=50)
+    lat = models.CharField(max_length=50)
+    lon = models.CharField(max_length=50)
+    value = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.sl
+#DONE Inserting
+class complaint(models.Model):
+    sl = models.CharField(max_length=50)
+    lat = models.CharField(max_length=50)
+    lon = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.sl
+#DONE INSERTING
+class check_worker_duty(models.Model):
+    workerid = models.CharField(max_length=50)
+    workername = models.CharField(max_length=50)
+    dutyvalue = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.workerid
+#DONE Inserting
+class details_house(models.Model):
+    housename = models.CharField(max_length=50)
+    lat = models.CharField(max_length=50)
+    lon = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.housename
+#DONE Inserting
+class user_registration(models.Model):
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=20)
+    phone = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.username
+#DONE Inserting
+class worker_registration(models.Model):
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=20)
+    phone = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.username

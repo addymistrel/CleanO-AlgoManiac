@@ -1,0 +1,181 @@
+from django.shortcuts import *
+from django.http import HttpResponse
+from .models import pickup,nearby_bins,complaint,check_worker_duty,details_house,user_registration,worker_registration
+from django.core import serializers
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+
+# Create your views here.
+def register_user(request):
+    if request.method=="POST":
+        username = request.POST.get('')
+        full_name = request.POST.get('')
+        phone = request.POST.get('')
+        email = request.POST.get('')
+        
+        if not user_registration.objects.filter(username=username).exsists():
+            try:
+                en = user_registration(username=username,full_name=full_name,phone=phone,email=email)
+                en.save()
+                messages.success(request, "Your Account is Created. Now you can Login.")
+                return redirect(login_view)
+            except Exception as e:
+                print(e)
+        else:
+            messages.success(request, 'Try Another Username.')
+            return redirect(register_user)
+    context = {}
+    return render(request, template_name,context)
+
+def register_worker(request):
+    if request.method=="POST":
+        username = request.POST.get('')
+        full_name = request.POST.get('')
+        phone = request.POST.get('')
+        email = request.POST.get('')
+        
+        if not user_registration.objects.filter(username=username).exsists():
+            try:
+                en = user_registration(username=username,full_name=full_name,phone=phone,email=email)
+                en.save()
+                messages.success(request, "Your Account is Created. Now you can Login.")
+                return redirect(login_view)
+            except Exception as e:
+                print(e)
+        else:
+            messages.success(request, 'Try Another Username.')
+            return redirect(register_user)
+    context = {}
+    return render(request, template_name,context)
+
+def register_house(request):
+    if request.method=="POST":
+        housename = request.POST.get('')
+        lat = request.POST.get('')
+        lon = request.POST.get('')
+        en = details_house(housename=housename,lat=lat,lon=lon)
+        en.save()
+    return render(request, template_name)
+
+def workers_activity(request):
+    if request.method=="POST":
+        workerid = request.POST.get('')
+        workername = request.POST.get('')
+        dutyvalue = request.POST.get('')
+        en = check_worker_duty(workerid=workerid,workername=workername,dutyvalue=dutyvalue)
+        en.save()
+    return render(request, template_name)
+
+def make_complain(request):
+    if request.method=="POST":
+        sl = request.POST.get('')
+        lat = request.POST.get('')
+        lon = request.POST.get('')
+        en = complaint(sl=sl,lat=lat,lon=lon)
+        en.save()
+    return render(request, template_name)
+
+def assign_bins(request):
+    if request.method=="POST":
+        sl = request.POST.get('')
+        lat = request.POST.get('')
+        lon = request.POST.get('')
+        value = request.POST.get('')
+        en = nearby_bins(sl=sl,lat=lat,lon=lon)
+        en.save()
+    return render(request, template_name)
+
+def pickup_initiated(request):
+    if request.method=="POST":
+        username = request.POST.get('')
+        workerid = request.POST.get('')
+        pi_date = request.POST.get('')
+        pi_time = request.POST.get('')
+        lat = request.POST.get('')
+        lon = request.POST.get('')
+        en = pickup(username=username,workerid=workerid,pi_date=pi_date,pi_time=pi_time,lat=lat,lon=lon)
+        en.save()
+    return render(request, template_name)
+
+'''def fetch_alluser(request):
+    data = user_registration.objects.all()
+    data_set = {
+        'data':data,
+    }
+    return render(request, template_name,data_set)
+
+def fetch_user_data(request):
+    if request.method=="GET":
+        st = request.GET.get('servicename')
+        if st!=None:
+            data = user_registration.objects.filter(username=st)
+    dt = {
+        'data':data
+    }
+    return render(request, template_name,data)'''
+
+def login_view_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'You Have Successfully Logged In.')
+                return redirect('index_view')
+
+            else:
+                messages.success(request, 'Type Correct Credentails')
+                return redirect('login_view_user')
+
+        except Exception as e:
+            print(e)
+
+    context = {}
+    return render(request, 'profiles/login.html', context)
+
+def login_view_worker(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'You Have Successfully Logged In.')
+                return redirect('index_view')
+
+            else:
+                messages.success(request, 'Type Correct Credentails')
+                return redirect('login_view_worker')
+
+        except Exception as e:
+            print(e)
+
+    context = {}
+    return render(request, '', context)
+
+def logout_view(request):
+    logout(request)
+    return redirect('register_view')
+
+def index_view_user(request):
+
+    try:
+        profile = user_registration.objects.get(username=request.user)
+    except Exception as e:
+        profile = None
+        print("Exception : ", e)
+    
+    context = {
+        'profile':profile,
+    }
+    return render(request,'',context)
