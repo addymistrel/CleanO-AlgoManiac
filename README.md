@@ -3,7 +3,7 @@
 A Web App Created By Team AlgoManiac in SMART ODISHA HACKATHON
 
 ## Team Behind -
-- Harsh (UI/UX designer)
+- Harsh Kumar(UI/UX designer)
 - Shruti Lenka (Frontend Specialist)
-- Sahil Kumar Sahu (Frontend Specialist)
+- Sahil Sahu (Frontend Specialist)
 - Aditya Kumar Dutta (Backend Specialist)
